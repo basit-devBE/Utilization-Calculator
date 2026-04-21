@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Utilisation Bonus Calculator — MVP Mockup</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #F5F4F0;
+    --surface: #FFFFFF;
+    --surface2: #F0EFE9;
+    --surface3: #E8E7E1;
+    --border: #DDD9CE;
+    --border2: #C8C4B8;
+    --text: #1A1916;
+    --text2: #5C5A52;
+    --text3: #9C9A90;
+    --accent: #1A472A;
+    --accent2: #2D6A42;
+    --accent-bg: #E8F0EB;
+    --accent-text: #1A472A;
+    --blue: #1B3F6E;
+    --blue-bg: #E8EEF5;
+    --blue-text: #1B3F6E;
+    --amber: #7A4F1D;
+    --amber-bg: #F5EDE0;
+    --amber-text: #7A4F1D;
+    --red: #8B2020;
+    --red-bg: #F5E8E8;
+    --red-text: #8B2020;
+    --purple: #3D2B6E;
+    --purple-bg: #EEE8F5;
+    --purple-text: #3D2B6E;
+    --teal: #1A4A4A;
+    --teal-bg: #E4EFEF;
+    --teal-text: #1A4A4A;
+    --nav-w: 224px;
+    --topbar: 56px;
+    --radius: 10px;
+    --radius-sm: 6px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.10), 0 2px 6px rgba(0,0,0,0.06);
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.5;
+    min-height: 100vh;
+    overflow: hidden;
+  }
+
+  /* ── LAYOUT ── */
+  .app { display: flex; height: 100vh; overflow: hidden; }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: var(--nav-w);
+    background: var(--text);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    height: 100vh;
+  }
+  .sidebar-logo {
+    padding: 20px 20px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .logo-mark {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .logo-icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: var(--accent2);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .logo-icon svg { width: 16px; height: 16px; fill: #fff; }
+  .logo-text { font-size: 13px; font-weight: 600; color: #fff; line-height: 1.2; }
+  .logo-sub { font-size: 10px; color: rgba(255,255,255,0.4); font-weight: 400; letter-spacing: 0.04em; }
+
+  .nav-section { padding: 12px 0; }
+  .nav-label {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; color: rgba(255,255,255,0.28);
+    padding: 4px 20px 8px;
+  }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 20px; cursor: pointer;
+    color: rgba(255,255,255,0.55);
+    font-size: 13px; font-weight: 400;
+    transition: all 0.15s;
+    position: relative;
+    border-radius: 0;
+  }
+  .nav-item:hover { color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.06); }
+  .nav-item.active {
+    color: #fff;
+    background: rgba(255,255,255,0.1);
+  }
+  .nav-item.active::before {
+    content: '';
+    position: absolute; left: 0; top: 4px; bottom: 4px;
+    width: 3px; background: var(--accent2);
+    border-radius: 0 3px 3px 0;
+  }
+  .nav-icon { width: 16px; height: 16px; opacity: 0.7; flex-shrink: 0; }
+  .nav-item.active .nav-icon { opacity: 1; }
+  .nav-badge {
+    margin-left: auto;
+    background: var(--accent2);
+    color: #fff;
+    font-size: 10px; font-weight: 600;
+    padding: 1px 6px; border-radius: 10px;
+    min-width: 18px; text-align: center;
+  }
+
+  .sidebar-footer {
+    margin-top: auto;
+    padding: 16px 20px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+  .user-info { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+  .user-avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--accent2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 600; color: #fff;
+    flex-shrink: 0;
+  }
+  .user-name { font-size: 12px; font-weight: 500; color: #fff; line-height: 1.2; }
+  .user-role { font-size: 10px; color: rgba(255,255,255,0.4); }
+  .role-switcher {
+    margin-left: auto;
+    background: rgba(255,255,255,0.1);
+    border: none;
+    color: rgba(255,255,255,0.6);
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+  .role-switcher:hover { background: rgba(255,255,255,0.18); color: #fff; }
+
+  /* ── MAIN AREA ── */
+  .main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .topbar {
+    height: var(--topbar);
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center;
+    padding: 0 28px;
+    gap: 16px;
+    flex-shrink: 0;
+  }
+  .page-title { font-size: 15px; font-weight: 600; color: var(--text); }
+  .breadcrumb { font-size: 12px; color: var(--text3); display: flex; align-items: center; gap: 6px; }
+  .breadcrumb span { color: var(--text2); }
+  .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+
+  .period-chip {
+    display: flex; align-items: center; gap: 6px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-size: 12px; font-weight: 500; color: var(--text2);
+    cursor: pointer;
+  }
+  .period-chip svg { width: 12px; height: 12px; }
+
+  .content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 28px;
+  }
+
+  /* ── COMMON COMPONENTS ── */
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 16px; border-radius: var(--radius-sm);
+    font-size: 13px; font-weight: 500; cursor: pointer;
+    border: none; font-family: inherit;
+    transition: all 0.15s;
+    text-decoration: none;
+  }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: var(--accent2); }
+  .btn-secondary {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    color: var(--text2);
+  }
+  .btn-secondary:hover { background: var(--surface2); border-color: var(--border2); }
+  .btn-ghost { background: transparent; color: var(--text2); padding: 8px 12px; }
+  .btn-ghost:hover { background: var(--surface2); }
+  .btn-sm { padding: 5px 12px; font-size: 12px; }
+  .btn-danger { background: var(--red-bg); color: var(--red-text); }
+  .btn svg { width: 14px; height: 14px; }
+
+  .chip {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 3px 9px; border-radius: 100px;
+    font-size: 11px; font-weight: 500;
+  }
+  .chip-dot { width: 5px; height: 5px; border-radius: 50%; }
+  .chip-green { background: var(--accent-bg); color: var(--accent-text); }
+  .chip-green .chip-dot { background: var(--accent); }
+  .chip-amber { background: var(--amber-bg); color: var(--amber-text); }
+  .chip-amber .chip-dot { background: var(--amber); }
+  .chip-blue { background: var(--blue-bg); color: var(--blue-text); }
+  .chip-blue .chip-dot { background: var(--blue); }
+  .chip-red { background: var(--red-bg); color: var(--red-text); }
+  .chip-red .chip-dot { background: var(--red); }
+  .chip-purple { background: var(--purple-bg); color: var(--purple-text); }
+  .chip-teal { background: var(--teal-bg); color: var(--teal-text); }
+  .chip-gray { background: var(--surface2); color: var(--text2); }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+
+  .card-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .card-title { font-size: 13px; font-weight: 600; color: var(--text); }
+  .card-body { padding: 20px; }
+
+  .metric-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+  .metric-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    box-shadow: var(--shadow);
+  }
+  .metric-label { font-size: 11px; font-weight: 500; color: var(--text3); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .metric-value { font-size: 26px; font-weight: 600; color: var(--text); letter-spacing: -0.02em; line-height: 1; margin-bottom: 4px; }
+  .metric-sub { font-size: 11px; color: var(--text3); }
+  .metric-accent { color: var(--accent); }
+  .metric-amber { color: var(--amber); }
+  .metric-red { color: var(--red); }
+
+  /* ── TABLE ── */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; }
+  thead th {
+    text-align: left;
+    font-size: 11px; font-weight: 600;
+    color: var(--text3); text-transform: uppercase; letter-spacing: 0.05em;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface2);
+    white-space: nowrap;
+  }
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.1s;
+    cursor: pointer;
+  }
+  tbody tr:hover { background: var(--surface2); }
+  tbody tr:last-child { border-bottom: none; }
+  td { padding: 11px 16px; font-size: 13px; color: var(--text); vertical-align: middle; }
+  td.muted { color: var(--text2); }
+  td.mono { font-family: 'DM Mono', monospace; font-size: 12px; }
+
+  .row-flagged { background: #FFFBF0 !important; }
+  .row-flagged:hover { background: #FFF5D6 !important; }
+
+  /* ── PROGRESS BAR ── */
+  .progress-bar { height: 6px; background: var(--surface3); border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 3px; background: var(--accent2); transition: width 0.3s; }
+  .progress-fill.amber { background: var(--amber); }
+  .progress-fill.red { background: var(--red); }
+
+  /* ── FORM ── */
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-group { display: flex; flex-direction: column; gap: 5px; }
+  .form-label { font-size: 12px; font-weight: 500; color: var(--text2); }
+  .form-input, .form-select {
+    height: 36px;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius-sm);
+    padding: 0 12px;
+    font-size: 13px; color: var(--text);
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .form-input:focus, .form-select:focus { border-color: var(--accent2); }
+
+  /* ── ALERT BANNER ── */
+  .alert {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 20px;
+    font-size: 13px;
+  }
+  .alert-amber { background: var(--amber-bg); color: var(--amber-text); border: 1px solid #E8C88A; }
+  .alert-green { background: var(--accent-bg); color: var(--accent-text); border: 1px solid #9BC4A8; }
+  .alert-blue { background: var(--blue-bg); color: var(--blue-text); border: 1px solid #A0BBD8; }
+  .alert svg { width: 15px; height: 15px; flex-shrink: 0; margin-top: 1px; }
+  .alert-title { font-weight: 600; margin-bottom: 2px; }
+
+  /* ── SCREENS ── */
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* ── SECTION HEADER ── */
+  .section-hd {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 18px;
+  }
+  .section-hd h2 { font-size: 18px; font-weight: 600; letter-spacing: -0.02em; }
+  .section-hd .actions { display: flex; gap: 8px; }
+
+  /* ── FILTER BAR ── */
+  .filter-bar {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .search-input-wrap {
+    position: relative; flex: 1; min-width: 200px; max-width: 280px;
+  }
+  .search-icon {
+    position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+    width: 14px; height: 14px; color: var(--text3);
+  }
+  .search-input {
+    width: 100%; height: 34px;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius-sm);
+    padding: 0 10px 0 32px;
+    font-size: 13px; color: var(--text);
+    font-family: inherit; outline: none;
+  }
+  .filter-select {
+    height: 34px;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius-sm);
+    padding: 0 10px;
+    font-size: 12px; color: var(--text2);
+    font-family: inherit; outline: none;
+    cursor: pointer;
+  }
+
+  /* ── SUMMARY TOTALS BAR ── */
+  .summary-bar {
+    display: flex; gap: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 20px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .summary-item {
+    flex: 1; padding: 14px 18px;
+    border-right: 1px solid var(--border);
+  }
+  .summary-item:last-child { border-right: none; }
+  .summary-label { font-size: 10px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 3px; }
+  .summary-value { font-size: 18px; font-weight: 600; color: var(--text); letter-spacing: -0.02em; }
+  .summary-sub { font-size: 11px; color: var(--text3); margin-top: 1px; }
+
+  /* ── TIER BAR ── */
+  .tier-bar { display: flex; gap: 3px; height: 8px; border-radius: 4px; overflow: hidden; margin: 6px 0; }
+  .tier-seg { flex: 1; }
+
+  /* ── CHECKLIST ── */
+  .checklist { display: flex; flex-direction: column; gap: 10px; }
+  .check-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 16px;
+    background: var(--surface2);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+  }
+  .check-icon { width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .check-pass { background: var(--accent-bg); color: var(--accent); }
+  .check-fail { background: var(--amber-bg); color: var(--amber); }
+  .check-text { font-size: 13px; color: var(--text); }
+  .check-sub { font-size: 11px; color: var(--text3); }
+
+  /* ── BREAKDOWN ── */
+  .breakdown-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .breakdown-row:last-child { border-bottom: none; }
+  .breakdown-label { color: var(--text2); }
+  .breakdown-val { font-weight: 500; color: var(--text); font-family: 'DM Mono', monospace; font-size: 12px; }
+  .breakdown-formula { font-size: 11px; color: var(--text3); margin-top: 2px; font-family: 'DM Mono', monospace; }
+  .breakdown-final { font-size: 16px; font-weight: 600; color: var(--accent); }
+
+  /* ── APPROVAL QUEUE ── */
+  .approval-layout { display: grid; grid-template-columns: 280px 1fr; gap: 20px; height: calc(100vh - var(--topbar) - 56px - 28px); }
+  .queue-list { display: flex; flex-direction: column; gap: 10px; overflow-y: auto; padding-right: 4px; }
+  .queue-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: all 0.15s;
+    box-shadow: var(--shadow);
+  }
+  .queue-item:hover { border-color: var(--border2); }
+  .queue-item.selected { border-color: var(--accent2); background: var(--accent-bg); }
+  .queue-item-title { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .queue-item-meta { font-size: 11px; color: var(--text3); }
+
+  .review-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    display: flex; flex-direction: column;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .review-panel-header { padding: 16px 20px; border-bottom: 1px solid var(--border); background: var(--surface2); }
+  .review-panel-body { flex: 1; overflow-y: auto; padding: 20px; }
+  .review-panel-footer {
+    padding: 14px 20px;
+    border-top: 1px solid var(--border);
+    background: var(--surface2);
+    display: flex; gap: 10px; align-items: center;
+  }
+  .comment-input {
+    flex: 1; height: 34px;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius-sm);
+    padding: 0 12px;
+    font-size: 13px; color: var(--text);
+    font-family: inherit; outline: none;
+  }
+
+  /* ── SETTINGS ── */
+  .settings-layout { display: grid; grid-template-columns: 180px 1fr; gap: 20px; }
+  .settings-nav { display: flex; flex-direction: column; gap: 2px; }
+  .settings-nav-item {
+    padding: 8px 12px; border-radius: var(--radius-sm);
+    font-size: 13px; cursor: pointer; color: var(--text2);
+    transition: all 0.15s;
+  }
+  .settings-nav-item:hover { background: var(--surface2); }
+  .settings-nav-item.active { background: var(--accent-bg); color: var(--accent-text); font-weight: 500; }
+
+  /* ── MINI CHART ── */
+  .sparkbar { display: flex; gap: 3px; align-items: flex-end; height: 32px; }
+  .sparkbar-col { width: 16px; background: var(--accent-bg); border-radius: 2px; transition: background 0.15s; }
+  .sparkbar-col:hover { background: var(--accent2); }
+  .sparkbar-col.current { background: var(--accent2); }
+
+  /* ── AVATAR ── */
+  .emp-avatar {
+    width: 30px; height: 30px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 600; color: #fff;
+    flex-shrink: 0;
+  }
+
+  /* ── TABS ── */
+  .tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+  .tab {
+    padding: 10px 18px;
+    font-size: 13px; font-weight: 400;
+    color: var(--text3); cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s;
+    margin-bottom: -1px;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--text); font-weight: 500; border-bottom-color: var(--accent2); }
+
+  /* ── DIVIDER ── */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 18px 0; }
+
+  /* ── SLIDE TRANSITION ── */
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  .screen.active { animation: fadeIn 0.2s ease; }
+
+  /* ── PAGINATION ── */
+  .pagination { display: flex; align-items: center; gap: 8px; padding: 12px 16px; border-top: 1px solid var(--border); }
+  .pagination span { font-size: 12px; color: var(--text3); }
+  .page-btn {
+    width: 28px; height: 28px; border-radius: 4px;
+    background: var(--surface); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 12px; color: var(--text2);
+  }
+  .page-btn:hover { background: var(--surface2); }
+  .page-btn.active-pg { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  /* ── UTILISATION INLINE EDIT ── */
+  .util-input {
+    width: 70px; height: 28px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    text-align: right;
+    padding: 0 8px;
+    font-size: 12px; font-family: 'DM Mono', monospace;
+    background: var(--surface);
+    outline: none;
+  }
+  .util-input:focus { border-color: var(--accent2); background: var(--accent-bg); }
+
+  /* ── RUN PROGRESS ── */
+  .run-progress { text-align: center; padding: 30px; }
+  .run-icon {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: var(--accent-bg);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 14px;
+    font-size: 22px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spinner {
+    width: 20px; height: 20px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+  /* notification dot */
+  .notif-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #E85D24;
+    position: absolute; top: 7px; right: 16px;
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ══ SIDEBAR ══ -->
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">
+        <div class="logo-icon">
+          <svg viewBox="0 0 16 16"><path d="M8 1L14 5V11L8 15L2 11V5L8 1Z"/></svg>
+        </div>
+        <div>
+          <div class="logo-text">BonusCalc</div>
+          <div class="logo-sub">Utilisation System</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-label">Main</div>
+      <div class="nav-item active" onclick="navigate('dashboard')">
+        <svg class="nav-icon" fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/></svg>
+        Dashboard
+      </div>
+      <div class="nav-item" onclick="navigate('employees')">
+        <svg class="nav-icon" fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="5" r="2.5"/><path d="M1 13c0-2.8 2.2-5 5-5"/><circle cx="12" cy="6" r="2"/><path d="M10 13c0-2 1-3.5 2-4.5"/></svg>
+        Employees
+      </div>
+      <div class="nav-item" onclick="navigate('utilisation')">
+        <svg class="nav-icon" fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5"><path d="M2 12L6 8L9 10L14 4"/><circle cx="6" cy="8" r="1" fill="currentColor"/><circle cx="9" cy="10" r="1" fill="currentColor"/></svg>
+        Utilisation
+      </div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-label">Workflow</div>
+      <div class="nav-item" onclick="navigate('calculations')">
+        <svg class="nav-icon" fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="2"/><path d="M5 8h6M8 5v6"/></svg>
+        Calculations
+      </div>
+      <div class="nav-item" onclick="navigate('approvals')" style="position:relative;">
+        <svg class="nav-icon" fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5"><path d="M13 7V13a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1h6"/><path d="M10 1l3 3-5 5H5V6l5-5z"/></svg>
+        Approvals
+        <span class="nav-badge">3</span>
+      </div>
+      <div class="nav-item" onclick="navigate('results')">
+        <svg class="nav-icon" fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5"><path d="M3 4h10M3 8h10M3 12h6"/></svg>
+        Results
+      </div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-label">Admin</div>
+      <div class="nav-item" onclick="navigate('settings')">
+        <svg class="nav-icon" fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="2"/><path d="M8 2v1M8 13v1M2 8h1M13 8h1M3.5 3.5l.7.7M11.8 11.8l.7.7M3.5 12.5l.7-.7M11.8 4.2l.7-.7"/></svg>
+        Settings
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="user-info">
+        <div class="user-avatar" id="userAvatar">AB</div>
+        <div>
+          <div class="user-name" id="userName">Abena Boateng</div>
+          <div class="user-role" id="userRole">HR Officer</div>
+        </div>
+        <button class="role-switcher" onclick="cycleRole()">Switch</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══ MAIN ══ -->
+  <div class="main">
+    <div class="topbar">
+      <div>
+        <div class="page-title" id="pageTitle">Dashboard</div>
+        <div class="breadcrumb" id="breadcrumb">Overview</div>
+      </div>
+      <div class="topbar-right">
+        <div class="period-chip">
+          <svg fill="none" viewBox="0 0 12 12" stroke="currentColor" stroke-width="1.5"><rect x="1" y="2" width="10" height="9" rx="1.5"/><path d="M4 1v2M8 1v2M1 5h10"/></svg>
+          Q2 2025 — Apr–Jun
+        </div>
+        <div class="chip chip-amber"><span class="chip-dot"></span>In Review</div>
+        <button class="btn btn-secondary btn-sm" onclick="navigate('calculations')">
+          <svg fill="none" viewBox="0 0 14 14" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="5"/><path d="M7 5v2l1.5 1.5"/></svg>
+          Run Calculation
+        </button>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- ══ DASHBOARD ══ -->
+      <div class="screen active" id="screen-dashboard">
+        <div class="alert alert-amber">
+          <svg fill="none" viewBox="0 0 15 15" stroke="currentColor" stroke-width="1.5"><circle cx="7.5" cy="7.5" r="6"/><path d="M7.5 4.5v3.5M7.5 10.5v.5"/></svg>
+          <div>
+            <div class="alert-title">5 employees have incomplete utilisation data for Q2 2025</div>
+            Resolve before running the calculation. <a href="#" onclick="navigate('utilisation')" style="color:var(--amber);font-weight:500;">Review records →</a>
+          </div>
+        </div>
+
+        <div class="metric-grid">
+          <div class="metric-card">
+            <div class="metric-label">Total Employees</div>
+            <div class="metric-value">142</div>
+            <div class="metric-sub">Active this period</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Data Completeness</div>
+            <div class="metric-value metric-amber">96.5%</div>
+            <div class="metric-sub">137 of 142 records ready</div>
+            <div style="margin-top:8px;"><div class="progress-bar"><div class="progress-fill" style="width:96.5%"></div></div></div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Est. Total Payout</div>
+            <div class="metric-value metric-accent">GHS 418k</div>
+            <div class="metric-sub">vs. GHS 450k budget</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Pending Approvals</div>
+            <div class="metric-value metric-amber">3</div>
+            <div class="metric-sub">2 Finance · 1 Manager</div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Department status</span>
+              <span class="chip chip-gray">Q2 2025</span>
+            </div>
+            <div style="padding:4px 0;">
+              <table style="width:100%">
+                <thead><tr><th>Department</th><th>Employees</th><th>Ready</th><th>Status</th></tr></thead>
+                <tbody>
+                  <tr><td>Engineering</td><td class="muted">38</td><td class="muted">38</td><td><span class="chip chip-green"><span class="chip-dot"></span>Ready</span></td></tr>
+                  <tr><td>Design</td><td class="muted">14</td><td class="muted">14</td><td><span class="chip chip-green"><span class="chip-dot"></span>Ready</span></td></tr>
+                  <tr><td>Consulting</td><td class="muted">52</td><td class="muted">49</td><td><span class="chip chip-amber"><span class="chip-dot"></span>3 Missing</span></td></tr>
+                  <tr><td>Product</td><td class="muted">28</td><td class="muted">26</td><td><span class="chip chip-amber"><span class="chip-dot"></span>2 Missing</span></td></tr>
+                  <tr><td>Operations</td><td class="muted">10</td><td class="muted">10</td><td><span class="chip chip-green"><span class="chip-dot"></span>Ready</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Recent activity</span>
+            </div>
+            <div style="padding:8px 0;">
+              <div style="display:flex;flex-direction:column;gap:0;">
+                <div style="display:flex;gap:12px;padding:10px 16px;border-bottom:1px solid var(--border);font-size:12px;">
+                  <div style="color:var(--text3);min-width:52px;">11:42 AM</div>
+                  <div><span style="font-weight:500;color:var(--text);">Kofi Mensah</span> <span style="color:var(--text2);">imported 28 utilisation records (Consulting)</span></div>
+                </div>
+                <div style="display:flex;gap:12px;padding:10px 16px;border-bottom:1px solid var(--border);font-size:12px;">
+                  <div style="color:var(--text3);min-width:52px;">10:15 AM</div>
+                  <div><span style="font-weight:500;color:var(--text);">Ama Owusu</span> <span style="color:var(--text2);">approved Engineering team — Q2 2025</span></div>
+                </div>
+                <div style="display:flex;gap:12px;padding:10px 16px;border-bottom:1px solid var(--border);font-size:12px;">
+                  <div style="color:var(--text3);min-width:52px;">Yesterday</div>
+                  <div><span style="font-weight:500;color:var(--text);">Abena Boateng</span> <span style="color:var(--text2);">ran Q2 calculation — 139 records processed</span></div>
+                </div>
+                <div style="display:flex;gap:12px;padding:10px 16px;border-bottom:1px solid var(--border);font-size:12px;">
+                  <div style="color:var(--text3);min-width:52px;">Yesterday</div>
+                  <div><span style="font-weight:500;color:var(--text);">Finance</span> <span style="color:var(--text2);">returned Consulting run — 2 flagged records</span></div>
+                </div>
+                <div style="display:flex;gap:12px;padding:10px 16px;font-size:12px;">
+                  <div style="color:var(--text3);min-width:52px;">Mon</div>
+                  <div><span style="font-weight:500;color:var(--text);">Abena Boateng</span> <span style="color:var(--text2);">added 3 new employee records</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payout distribution -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Bonus tier distribution — Q2 2025 (preliminary)</span>
+            <button class="btn btn-ghost btn-sm" onclick="navigate('results')">View full results →</button>
+          </div>
+          <div style="padding:16px 20px;">
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;">
+              <div style="text-align:center;">
+                <div style="font-size:11px;color:var(--text3);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em;">Tier 1 (≥90%)</div>
+                <div style="font-size:22px;font-weight:600;color:var(--accent);">31</div>
+                <div style="font-size:11px;color:var(--text3);">22% of employees</div>
+                <div style="margin-top:8px;height:6px;background:var(--accent-bg);border-radius:3px;overflow:hidden;"><div style="height:100%;width:22%;background:var(--accent2);border-radius:3px;"></div></div>
+              </div>
+              <div style="text-align:center;">
+                <div style="font-size:11px;color:var(--text3);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em;">Tier 2 (75–89%)</div>
+                <div style="font-size:22px;font-weight:600;color:var(--blue);">58</div>
+                <div style="font-size:11px;color:var(--text3);">41% of employees</div>
+                <div style="margin-top:8px;height:6px;background:var(--blue-bg);border-radius:3px;overflow:hidden;"><div style="height:100%;width:41%;background:var(--blue);border-radius:3px;"></div></div>
+              </div>
+              <div style="text-align:center;">
+                <div style="font-size:11px;color:var(--text3);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em;">Tier 3 (60–74%)</div>
+                <div style="font-size:22px;font-weight:600;color:var(--amber);">38</div>
+                <div style="font-size:11px;color:var(--text3);">27% of employees</div>
+                <div style="margin-top:8px;height:6px;background:var(--amber-bg);border-radius:3px;overflow:hidden;"><div style="height:100%;width:27%;background:var(--amber);border-radius:3px;"></div></div>
+              </div>
+              <div style="text-align:center;">
+                <div style="font-size:11px;color:var(--text3);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em;">Below threshold</div>
+                <div style="font-size:22px;font-weight:600;color:var(--text3);">10</div>
+                <div style="font-size:11px;color:var(--text3);">7% — no bonus</div>
+                <div style="margin-top:8px;height:6px;background:var(--surface3);border-radius:3px;overflow:hidden;"><div style="height:100%;width:7%;background:var(--border2);border-radius:3px;"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ EMPLOYEES ══ -->
+      <div class="screen" id="screen-employees">
+        <div class="section-hd">
+          <div>
+            <h2>Employees</h2>
+            <div style="font-size:12px;color:var(--text3);margin-top:2px;">142 active records · Q2 2025</div>
+          </div>
+          <div class="actions">
+            <button class="btn btn-secondary btn-sm" onclick="navigate('import')">
+              <svg fill="none" viewBox="0 0 14 14" stroke="currentColor" stroke-width="1.5"><path d="M7 1v8M4 6l3 3 3-3M2 10v2a1 1 0 001 1h8a1 1 0 001-1v-2"/></svg>
+              Import CSV
+            </button>
+            <button class="btn btn-primary btn-sm">+ Add Employee</button>
+          </div>
+        </div>
+
+        <div class="filter-bar">
+          <div class="search-input-wrap">
+            <svg class="search-icon" fill="none" viewBox="0 0 14 14" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="6" r="4"/><path d="M10 10l2.5 2.5"/></svg>
+            <input class="search-input" placeholder="Search name or ID…">
+          </div>
+          <select class="filter-select"><option>All Departments</option><option>Engineering</option><option>Design</option><option>Consulting</option><option>Product</option></select>
+          <select class="filter-select"><option>All Status</option><option>Active</option><option>Inactive</option></select>
+          <select class="filter-select"><option>All Data Status</option><option>Complete</option><option>Incomplete</option></select>
+        </div>
+
+        <div class="card">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Employee</th><th>ID</th><th>Department</th><th>Grade</th><th>Data Status</th><th>Status</th><th></th></tr></thead>
+              <tbody>
+                <tr onclick="navigate('empdetail')">
+                  <td><div style="display:flex;align-items:center;gap:10px;"><div class="emp-avatar" style="background:#1A472A;">AO</div><div><div style="font-weight:500;">Ama Owusu</div><div style="font-size:11px;color:var(--text3);">ama.owusu@company.com</div></div></div></td>
+                  <td class="mono muted">EMP-0042</td><td class="muted">Engineering</td><td class="muted">Senior</td>
+                  <td><span class="chip chip-green"><span class="chip-dot"></span>Complete</span></td>
+                  <td><span class="chip chip-teal">Active</span></td>
+                  <td><button class="btn btn-ghost btn-sm">Edit</button></td>
+                </tr>
+                <tr onclick="navigate('empdetail')">
+                  <td><div style="display:flex;align-items:center;gap:10px;"><div class="emp-avatar" style="background:#1B3F6E;">KM</div><div><div style="font-weight:500;">Kofi Mensah</div><div style="font-size:11px;color:var(--text3);">k.mensah@company.com</div></div></div></td>
+                  <td class="mono muted">EMP-0071</td><td class="muted">Consulting</td><td class="muted">Mid</td>
+                  <td><span class="chip chip-green"><span class="chip-dot"></span>Complete</span></td>
+                  <td><span class="chip chip-teal">Active</span></td>
+                  <td><button class="btn btn-ghost btn-sm">Edit</button></td>
+                </tr>
+                <tr class="row-flagged" onclick="navigate('empdetail')">
+                  <td><div style="display:flex;align-items:center;gap:10px;"><div class="emp-avatar" style="background:#7A4F1D;">EQ</div><div><div style="font-weight:500;">Efua Quaye</div><div style="font-size:11px;color:var(--text3);">e.quaye@company.com</div></div></div></td>
+                  <td class="mono muted">EMP-0088</td><td class="muted">Consulting</td><td class="muted">Junior</td>
+                  <td><span class="chip chip-amber"><span class="chip-dot"></span>Missing data</span></td>
+                  <td><span class="chip chip-teal">Active</span></td>
+                  <td><button class="btn btn-ghost btn-sm">Edit</button></td>
+                </tr>
+                <tr onclick="navigate('empdetail')">
+                  <td><div style="display:flex;align-items:center;gap:10px;"><div class="emp-avatar" style="background:#3D2B6E;">PA</div><div><div style="font-weight:500;">Prince Asante</div><div style="font-size:11px;color:var(--text3);">p.asante@company.com</div></div></div></td>
+                  <td class="mono muted">EMP-0103</td><td class="muted">Product</td><td class="muted">Lead</td>
+                  <td><span class="chip chip-green"><span class="chip-dot"></span>Complete</span></td>
+                  <td><span class="chip chip-teal">Active</span></td>
+                  <td><button class="btn btn-ghost btn-sm">Edit</button></td>
+                </tr>
+                <tr onclick="navigate('empdetail')">
+                  <td><div style="display:flex;align-items:center;gap:10px;"><div class="emp-avatar" style="background:#1A4A4A;">NB</div><div><div style="font-weight:500;">Nana Bonsu</div><div style="font-size:11px;color:var(--text3);">n.bonsu@company.com</div></div></div></td>
+                  <td class="mono muted">EMP-0119</td><td class="muted">Design</td><td class="muted">Mid</td>
+                  <td><span class="chip chip-green"><span class="chip-dot"></span>Complete</span></td>
+                  <td><span class="chip chip-teal">Active</span></td>
+                  <td><button class="btn btn-ghost btn-sm">Edit</button></td>
+                </tr>
+                <tr class="row-flagged">
+                  <td><div style="display:flex;align-items:center;gap:10px;"><div class="emp-avatar" style="background:#8B2020;">YA</div><div><div style="font-weight:500;">Yaa Asare</div><div style="font-size:11px;color:var(--text3);">y.asare@company.com</div></div></div></td>
+                  <td class="mono muted">EMP-0127</td><td class="muted">Product</td><td class="muted">Mid</td>
+                  <td><span class="chip chip-amber"><span class="chip-dot"></span>Missing data</span></td>
+                  <td><span class="chip chip-teal">Active</span></td>
+                  <td><button class="btn btn-ghost btn-sm">Edit</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination">
+            <span>Showing 1–6 of 142</span>
+            <div style="margin-left:auto;display:flex;gap:4px;">
+              <div class="page-btn active-pg">1</div>
+              <div class="page-btn">2</div>
+              <div class="page-btn">3</div>
+              <div class="page-btn">…</div>
+              <div class="page-btn">24</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ EMPLOYEE DETAIL ══ -->
+      <div class="screen" id="screen-empdetail">
+        <div style="margin-bottom:14px;">
+          <button class="btn btn-ghost btn-sm" onclick="navigate('employees')" style="padding-left:4px;">
+            <svg fill="none" viewBox="0 0 14 14" stroke="currentColor" stroke-width="1.5"><path d="M9 2L4 7l5 5"/></svg>
+            Back to Employees
+          </button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 340px;gap:20px;">
+          <div>
+            <div class="card" style="margin-bottom:20px;">
+              <div style="padding:20px;display:flex;align-items:center;gap:16px;border-bottom:1px solid var(--border);">
+                <div class="emp-avatar" style="width:52px;height:52px;font-size:16px;background:#1A472A;">AO</div>
+                <div style="flex:1;">
+                  <div style="font-size:18px;font-weight:600;">Ama Owusu</div>
+                  <div style="font-size:12px;color:var(--text3);margin-top:2px;">EMP-0042 · Engineering · Senior Engineer</div>
+                </div>
+                <span class="chip chip-green"><span class="chip-dot"></span>Active</span>
+              </div>
+              <div class="card-body">
+                <div class="form-grid">
+                  <div class="form-group"><label class="form-label">First name</label><input class="form-input" value="Ama"></div>
+                  <div class="form-group"><label class="form-label">Last name</label><input class="form-input" value="Owusu"></div>
+                  <div class="form-group"><label class="form-label">Email</label><input class="form-input" value="ama.owusu@company.com"></div>
+                  <div class="form-group"><label class="form-label">Department</label><select class="form-select"><option>Engineering</option></select></div>
+                  <div class="form-group"><label class="form-label">Grade / Role</label><input class="form-input" value="Senior Engineer"></div>
+                  <div class="form-group"><label class="form-label">Start date</label><input class="form-input" type="date" value="2021-03-15"></div>
+                  <div class="form-group"><label class="form-label">Contract type</label><select class="form-select"><option>Full-time</option><option>Contract</option></select></div>
+                  <div class="form-group"><label class="form-label">Base salary (GHS)</label><input class="form-input" value="8,400"></div>
+                </div>
+                <div style="margin-top:20px;display:flex;gap:10px;">
+                  <button class="btn btn-primary btn-sm">Save changes</button>
+                  <button class="btn btn-secondary btn-sm">Discard</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="card" style="margin-bottom:14px;">
+              <div class="card-header"><span class="card-title">Q2 2025 Bonus Summary</span></div>
+              <div class="card-body">
+                <div style="text-align:center;padding:8px 0 16px;">
+                  <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;">Calculated bonus</div>
+                  <div style="font-size:32px;font-weight:600;color:var(--accent);letter-spacing:-0.02em;margin-top:4px;">GHS 1,680</div>
+                  <span class="chip chip-green" style="margin-top:6px;"><span class="chip-dot"></span>Tier 1 · 93.2% utilisation</span>
+                </div>
+                <hr class="divider">
+                <div class="breakdown-row"><div><div class="breakdown-label">Base salary</div></div><div class="breakdown-val">GHS 8,400</div></div>
+                <div class="breakdown-row"><div><div class="breakdown-label">Utilisation rate</div><div class="breakdown-formula">186.4h / 200h</div></div><div class="breakdown-val">93.2%</div></div>
+                <div class="breakdown-row"><div><div class="breakdown-label">Tier assigned</div><div class="breakdown-formula">≥90% → Tier 1</div></div><div class="breakdown-val">Tier 1</div></div>
+                <div class="breakdown-row"><div><div class="breakdown-label">Bonus rate</div><div class="breakdown-formula">Tier 1 = 20%</div></div><div class="breakdown-val">20%</div></div>
+                <div class="breakdown-row" style="border-bottom:none;padding-top:14px;">
+                  <div><div class="breakdown-label" style="font-weight:500;color:var(--text);">Final bonus</div></div>
+                  <div class="breakdown-final">GHS 1,680</div>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header"><span class="card-title">Change log</span></div>
+              <div style="padding:8px 0;font-size:12px;">
+                <div style="padding:8px 16px;border-bottom:1px solid var(--border);color:var(--text2);">
+                  <div style="font-weight:500;color:var(--text);">Record updated</div>
+                  <div style="color:var(--text3);">Grade changed → Senior Engineer</div>
+                  <div style="color:var(--text3);margin-top:2px;">Abena B. · 3 days ago</div>
+                </div>
+                <div style="padding:8px 16px;color:var(--text2);">
+                  <div style="font-weight:500;color:var(--text);">Record created</div>
+                  <div style="color:var(--text3);">Abena B. · Mar 15, 2021</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ UTILISATION ══ -->
+      <div class="screen" id="screen-utilisation">
+        <div class="section-hd">
+          <div>
+            <h2>Utilisation Data</h2>
+            <div style="font-size:12px;color:var(--text3);margin-top:2px;">Q2 2025 · 137 of 142 records complete</div>
+          </div>
+          <div class="actions">
+            <button class="btn btn-secondary btn-sm" onclick="navigate('import')">Import CSV</button>
+            <button class="btn btn-primary btn-sm">Save all</button>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:16px;padding:14px 18px;">
+          <div style="display:flex;align-items:center;gap:16px;">
+            <div style="font-size:12px;font-weight:500;color:var(--text2);">Period completion</div>
+            <div style="flex:1;"><div class="progress-bar"><div class="progress-fill" style="width:96.5%"></div></div></div>
+            <div style="font-size:12px;font-weight:500;color:var(--accent);">137 / 142</div>
+            <span class="chip chip-amber" style="margin-left:4px;"><span class="chip-dot"></span>5 missing</span>
+          </div>
+        </div>
+
+        <div class="filter-bar">
+          <div class="search-input-wrap"><svg class="search-icon" fill="none" viewBox="0 0 14 14" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="6" r="4"/><path d="M10 10l2.5 2.5"/></svg><input class="search-input" placeholder="Search…"></div>
+          <select class="filter-select"><option>All Departments</option><option>Engineering</option><option>Consulting</option></select>
+          <select class="filter-select"><option>All Status</option><option>Complete</option><option>Missing</option></select>
+        </div>
+
+        <div class="card">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Employee</th><th>Department</th><th>Billable hrs</th><th>Available hrs</th><th>Utilisation %</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td><div style="display:flex;align-items:center;gap:8px;"><div class="emp-avatar" style="background:#1A472A;width:26px;height:26px;font-size:10px;">AO</div>Ama Owusu</div></td><td class="muted">Engineering</td><td><input class="util-input" value="186.4"></td><td><input class="util-input" value="200"></td><td><span style="font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--accent);">93.2%</span></td><td><span class="chip chip-green"><span class="chip-dot"></span>Saved</span></td></tr>
+                <tr><td><div style="display:flex;align-items:center;gap:8px;"><div class="emp-avatar" style="background:#1B3F6E;width:26px;height:26px;font-size:10px;">KM</div>Kofi Mensah</div></td><td class="muted">Consulting</td><td><input class="util-input" value="154.0"></td><td><input class="util-input" value="200"></td><td><span style="font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--blue);">77.0%</span></td><td><span class="chip chip-green"><span class="chip-dot"></span>Saved</span></td></tr>
+                <tr class="row-flagged"><td><div style="display:flex;align-items:center;gap:8px;"><div class="emp-avatar" style="background:#7A4F1D;width:26px;height:26px;font-size:10px;">EQ</div>Efua Quaye</div></td><td class="muted">Consulting</td><td><input class="util-input" placeholder="—" style="border-color:var(--amber);"></td><td><input class="util-input" value="200"></td><td><span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--text3);">—</span></td><td><span class="chip chip-amber"><span class="chip-dot"></span>Missing</span></td></tr>
+                <tr><td><div style="display:flex;align-items:center;gap:8px;"><div class="emp-avatar" style="background:#3D2B6E;width:26px;height:26px;font-size:10px;">PA</div>Prince Asante</div></td><td class="muted">Product</td><td><input class="util-input" value="121.5"></td><td><input class="util-input" value="200"></td><td><span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--text2);">60.8%</span></td><td><span class="chip chip-green"><span class="chip-dot"></span>Saved</span></td></tr>
+                <tr><td><div style="display:flex;align-items:center;gap:8px;"><div class="emp-avatar" style="background:#1A4A4A;width:26px;height:26px;font-size:10px;">NB</div>Nana Bonsu</div></td><td class="muted">Design</td><td><input class="util-input" value="168.0"></td><td><input class="util-input" value="200"></td><td><span style="font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--blue);">84.0%</span></td><td><span class="chip chip-green"><span class="chip-dot"></span>Saved</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="padding:10px 16px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-size:12px;color:var(--amber);font-weight:500;">1 unsaved change</span>
+            <div style="display:flex;gap:8px;"><button class="btn btn-secondary btn-sm">Discard</button><button class="btn btn-primary btn-sm">Save all</button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ IMPORT ══ -->
+      <div class="screen" id="screen-import">
+        <div style="margin-bottom:14px;"><button class="btn btn-ghost btn-sm" onclick="navigate('employees')" style="padding-left:4px;"><svg fill="none" viewBox="0 0 14 14" stroke="currentColor" stroke-width="1.5"><path d="M9 2L4 7l5 5"/></svg> Back</button></div>
+        <div style="max-width:580px;">
+          <div style="margin-bottom:20px;">
+            <div style="display:flex;gap:0;margin-bottom:24px;">
+              <div style="flex:1;text-align:center;padding-bottom:10px;border-bottom:2px solid var(--accent2);font-size:12px;font-weight:600;color:var(--accent);">1 · Upload</div>
+              <div style="flex:1;text-align:center;padding-bottom:10px;border-bottom:2px solid var(--border);font-size:12px;color:var(--text3);">2 · Map columns</div>
+              <div style="flex:1;text-align:center;padding-bottom:10px;border-bottom:2px solid var(--border);font-size:12px;color:var(--text3);">3 · Confirm</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <div style="border:2px dashed var(--border2);border-radius:var(--radius);padding:48px 24px;text-align:center;cursor:pointer;transition:all 0.15s;background:var(--surface2);" onmouseover="this.style.borderColor='var(--accent2)'" onmouseout="this.style.borderColor='var(--border2)'">
+                <div style="font-size:32px;margin-bottom:10px;">📄</div>
+                <div style="font-size:14px;font-weight:500;color:var(--text);margin-bottom:4px;">Drop your CSV or Excel file here</div>
+                <div style="font-size:12px;color:var(--text3);margin-bottom:16px;">Supports .csv, .xlsx · Max 5MB</div>
+                <button class="btn btn-primary btn-sm">Browse files</button>
+              </div>
+              <div style="margin-top:16px;">
+                <div style="font-size:12px;font-weight:500;color:var(--text2);margin-bottom:8px;">Expected columns</div>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                  <span class="chip chip-gray">employee_id</span>
+                  <span class="chip chip-gray">full_name</span>
+                  <span class="chip chip-gray">department</span>
+                  <span class="chip chip-gray">billable_hours</span>
+                  <span class="chip chip-gray">available_hours</span>
+                  <span class="chip chip-gray">period</span>
+                </div>
+              </div>
+              <a href="#" style="font-size:12px;color:var(--accent);display:block;margin-top:12px;">Download template file →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ CALCULATIONS ══ -->
+      <div class="screen" id="screen-calculations">
+        <div class="section-hd">
+          <div><h2>Run Calculation</h2><div style="font-size:12px;color:var(--text3);margin-top:2px;">Q2 2025 · Apr–Jun</div></div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 340px;gap:20px;">
+          <div>
+            <div class="card" style="margin-bottom:16px;">
+              <div class="card-header"><span class="card-title">Pre-run checklist</span></div>
+              <div style="padding:16px 20px;">
+                <div class="checklist">
+                  <div class="check-item"><div class="check-icon check-pass"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 5l2.5 2.5L8 3"/></svg></div><div><div class="check-text">Bonus tiers configured</div><div class="check-sub">3 tiers active — last updated 4 days ago</div></div></div>
+                  <div class="check-item"><div class="check-icon check-pass"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 5l2.5 2.5L8 3"/></svg></div><div><div class="check-text">Period confirmed</div><div class="check-sub">Q2 2025 — 1 Apr to 30 Jun</div></div></div>
+                  <div class="check-item"><div class="check-icon check-fail"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3l4 4M7 3L3 7"/></svg></div><div><div class="check-text" style="color:var(--amber);">Utilisation data not fully complete</div><div class="check-sub">5 employees are missing data — calculation will skip them</div></div></div>
+                  <div class="check-item"><div class="check-icon check-pass"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 5l2.5 2.5L8 3"/></svg></div><div><div class="check-text">Employee records complete</div><div class="check-sub">142 active records with valid base salaries</div></div></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header"><span class="card-title">Run configuration</span></div>
+              <div class="card-body">
+                <div class="form-grid" style="margin-bottom:16px;">
+                  <div class="form-group"><label class="form-label">Period</label><select class="form-select"><option>Q2 2025 (Apr–Jun)</option><option>Q1 2025</option></select></div>
+                  <div class="form-group"><label class="form-label">Bonus scheme</label><select class="form-select"><option>Standard utilisation scheme</option></select></div>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--amber-bg);border-radius:var(--radius-sm);border:1px solid #E8C88A;margin-bottom:16px;">
+                  <svg width="14" height="14" fill="none" viewBox="0 0 14 14" stroke="var(--amber)" stroke-width="1.5"><circle cx="7" cy="7" r="5.5"/><path d="M7 4v3.5M7 9.5v.5"/></svg>
+                  <span style="font-size:12px;color:var(--amber-text);">5 employees will be excluded due to missing utilisation data. <a href="#" onclick="navigate('utilisation')" style="font-weight:500;color:var(--amber);">Resolve now →</a></span>
+                </div>
+                <button class="btn btn-primary" onclick="navigate('results')" style="width:100%;justify-content:center;">
+                  Run calculation — 137 employees
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="card" style="margin-bottom:14px;">
+              <div class="card-header"><span class="card-title">Last run</span><span class="chip chip-blue">2 days ago</span></div>
+              <div class="card-body">
+                <div class="breakdown-row"><div class="breakdown-label">Records processed</div><div class="breakdown-val">139</div></div>
+                <div class="breakdown-row"><div class="breakdown-label">Total payout</div><div class="breakdown-val">GHS 412,840</div></div>
+                <div class="breakdown-row"><div class="breakdown-label">Errors / flags</div><div class="breakdown-val">2</div></div>
+                <div class="breakdown-row" style="border:none;"><div class="breakdown-label">Status</div><div><span class="chip chip-amber"><span class="chip-dot"></span>Returned</span></div></div>
+                <button class="btn btn-ghost btn-sm" style="margin-top:8px;width:100%;justify-content:center;" onclick="navigate('results')">View results →</button>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header"><span class="card-title">Active tier scheme</span></div>
+              <div style="padding:12px 16px;font-size:13px;">
+                <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);"><span class="chip chip-green">Tier 1</span><span class="muted" style="font-size:12px;">≥ 90%</span><span style="font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--accent);">20%</span></div>
+                <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);"><span class="chip chip-blue">Tier 2</span><span class="muted" style="font-size:12px;">75–89%</span><span style="font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--blue);">12%</span></div>
+                <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);"><span class="chip chip-amber">Tier 3</span><span class="muted" style="font-size:12px;">60–74%</span><span style="font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--amber);">6%</span></div>
+                <div style="display:flex;justify-content:space-between;padding:8px 0;"><span class="chip chip-gray">Below</span><span class="muted" style="font-size:12px;">< 60%</span><span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--text3);">0%</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ RESULTS ══ -->
+      <div class="screen" id="screen-results">
+        <div class="section-hd">
+          <div><h2>Calculation Results</h2><div style="font-size:12px;color:var(--text3);margin-top:2px;">Q2 2025 · Run on 18 Jul 2025 at 11:34 AM · by Abena Boateng</div></div>
+          <div class="actions">
+            <button class="btn btn-secondary btn-sm">
+              <svg fill="none" viewBox="0 0 14 14" stroke="currentColor" stroke-width="1.5"><path d="M7 1v8M4 6l3 3 3-3M2 10v2a1 1 0 001 1h8a1 1 0 001-1v-2"/></svg>
+              Export CSV
+            </button>
+            <button class="btn btn-primary btn-sm" onclick="navigate('approvals')">Submit for approval →</button>
+          </div>
+        </div>
+
+        <div class="summary-bar">
+          <div class="summary-item"><div class="summary-label">Records</div><div class="summary-value">137</div><div class="summary-sub">5 excluded (no data)</div></div>
+          <div class="summary-item"><div class="summary-label">Total payout</div><div class="summary-value" style="color:var(--accent);">GHS 418,200</div><div class="summary-sub">vs. GHS 450k budget</div></div>
+          <div class="summary-item"><div class="summary-label">Budget remaining</div><div class="summary-value" style="color:var(--blue);">GHS 31,800</div><div class="summary-sub">7.1% under budget</div></div>
+          <div class="summary-item"><div class="summary-label">Flagged records</div><div class="summary-value" style="color:var(--amber);">2</div><div class="summary-sub">Need review</div></div>
+          <div class="summary-item"><div class="summary-label">Status</div><div style="margin-top:4px;"><span class="chip chip-amber"><span class="chip-dot"></span>Pending review</span></div></div>
+        </div>
+
+        <div class="alert alert-amber">
+          <svg fill="none" viewBox="0 0 15 15" stroke="currentColor" stroke-width="1.5"><circle cx="7.5" cy="7.5" r="6"/><path d="M7.5 4.5v3.5M7.5 10.5v.5"/></svg>
+          <div><div class="alert-title">2 records are flagged as outliers</div>Utilisation above 100% — may indicate data entry error. Review before submitting.</div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Results</span>
+            <div style="display:flex;gap:8px;">
+              <select class="filter-select"><option>All Departments</option><option>Engineering</option><option>Consulting</option></select>
+              <select class="filter-select"><option>All Tiers</option><option>Tier 1</option><option>Tier 2</option><option>Tier 3</option></select>
+              <select class="filter-select"><option>All Status</option><option>Normal</option><option>Flagged</option></select>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Employee</th><th>Department</th><th>Utilisation</th><th>Tier</th><th>Base (GHS)</th><th>Bonus (GHS)</th><th>Status</th><th></th></tr></thead>
+              <tbody>
+                <tr onclick="navigate('empdetail')">
+                  <td><div style="display:flex;align-items:center;gap:8px;"><div class="emp-avatar" style="background:#1A472A;width:26px;height:26px;font-size:10px;">AO</div>Ama Owusu</div></td>
+                  <td class="muted">Engineering</td>
+                  <td><span style="font-family:'DM Mono',monospace;font-size:12px;font-weight:600;color:var(--accent);">93.2%</span></td>
+                  <td><span class="chip chip-green">Tier 1</span></td>
+                  <td class="mono muted">8,400</td>
+                  <td class="mono" style="font-weight:500;color:var(--accent);">1,680</td>
+                  <td><span class="chip chip-green"><span class="chip-dot"></span>Normal</span></td>
+                  <td><button class="btn btn-ghost btn-sm">Detail</button></td>
+                </tr>
+                <tr onclick="navigate('empdetail')">
+                  <td><div style="display:flex;align-items:center;gap:8px;"><div class="emp-avatar" style="background:#1B3F6E;width:26px;height:26px;font-size:10px;">KM</div>Kofi Mensah</div></td>
+                  <td class="muted">Consulting</td>
+                  <td><span style="font-family:'DM Mono',monospace;font-size:12px;font-weight:600;color:var(--blue);">77.0%</span></td>
+                  <td><span class="chip chip-blue">Tier 2</span></td>
+                  <td class="mono muted">6,200</td>
+                  <td class="mono" style="font-weight:500;color:var(--blue);">744</td>
+                  <td><span class="chip chip-green"><span class="chip-dot"></span>Normal</span></td>
+                  <td><button class="btn btn-ghost btn-sm">Detail</button></td>
+                </tr>
+                <tr class="row-flagged" onclick="navigate('empdetail')">
+                  <td><div style="display:flex;align-items:center;gap:8px;"><div class="emp-avatar" style="background:#8B2020;width:26px;height:26px;font-size:10px;">DK</div>Dani Kuma</div></td>
+                  <td class="muted">Engineering</td>
+                  <td><span style="font-family:'DM Mono',monospace;font-size:12px;font-weight:600;color:var(--red);">104.5%</span></td>
+                  <td><span class="chip chip-green">Tier 1</span></td>
+                  <td class="mono muted">7,800</td>
+                  <td class="mono" style="font-weight:500;color:var(--amber);">1,560</td>
+                  <td><span class="chip chip-amber"><span class="chip-dot"></span>Flagged</span></td>
+                  <td><button class="btn btn-ghost btn-sm">Detail</button></td>
+                </tr>
+                <tr onclick="navigate('empdetail')">
+                  <td><div style="display:flex;align-items:center;gap:8px;"><div class="emp-avatar" style="background:#3D2B6E;width:26px;height:26px;font-size:10px;">PA</div>Prince Asante</div></td>
+                  <td class="muted">Product</td>
+                  <td><span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--text2);">60.8%</span></td>
+                  <td><span class="chip chip-amber">Tier 3</span></td>
+                  <td class="mono muted">9,000</td>
+                  <td class="mono" style="color:var(--amber);">540</td>
+                  <td><span class="chip chip-green"><span class="chip-dot"></span>Normal</span></td>
+                  <td><button class="btn btn-ghost btn-sm">Detail</button></td>
+                </tr>
+                <tr onclick="navigate('empdetail')">
+                  <td><div style="display:flex;align-items:center;gap:8px;"><div class="emp-avatar" style="background:#1A4A4A;width:26px;height:26px;font-size:10px;">NB</div>Nana Bonsu</div></td>
+                  <td class="muted">Design</td>
+                  <td><span style="font-family:'DM Mono',monospace;font-size:12px;font-weight:600;color:var(--blue);">84.0%</span></td>
+                  <td><span class="chip chip-blue">Tier 2</span></td>
+                  <td class="mono muted">5,600</td>
+                  <td class="mono" style="color:var(--blue);">672</td>
+                  <td><span class="chip chip-green"><span class="chip-dot"></span>Normal</span></td>
+                  <td><button class="btn btn-ghost btn-sm">Detail</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination">
+            <span>Showing 1–5 of 137</span>
+            <div style="margin-left:auto;display:flex;gap:4px;">
+              <div class="page-btn active-pg">1</div><div class="page-btn">2</div><div class="page-btn">3</div><div class="page-btn">…</div><div class="page-btn">28</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ APPROVALS ══ -->
+      <div class="screen" id="screen-approvals">
+        <div class="section-hd" style="margin-bottom:16px;">
+          <div><h2>Approval Queue</h2><div style="font-size:12px;color:var(--text3);margin-top:2px;">3 items pending your action</div></div>
+        </div>
+
+        <div class="approval-layout">
+          <div class="queue-list">
+            <div class="queue-item selected">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+                <div class="queue-item-title">Q2 2025 — All departments</div>
+                <span class="chip chip-blue" style="margin-left:8px;">Finance</span>
+              </div>
+              <div class="queue-item-meta">137 records · GHS 418,200 total</div>
+              <div class="queue-item-meta" style="margin-top:4px;">Submitted by HR · 2 days ago</div>
+              <div style="display:flex;gap:4px;margin-top:8px;"><span class="chip chip-amber" style="font-size:10px;"><span class="chip-dot"></span>2 flagged</span></div>
+            </div>
+            <div class="queue-item">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+                <div class="queue-item-title">Q2 2025 — Engineering team</div>
+                <span class="chip chip-purple" style="margin-left:8px;">Manager</span>
+              </div>
+              <div class="queue-item-meta">38 records · GHS 91,400</div>
+              <div class="queue-item-meta" style="margin-top:4px;">From Finance · 1 day ago</div>
+            </div>
+            <div class="queue-item">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+                <div class="queue-item-title">Q1 2025 Correction</div>
+                <span class="chip chip-blue" style="margin-left:8px;">Finance</span>
+              </div>
+              <div class="queue-item-meta">3 amended records</div>
+              <div class="queue-item-meta" style="margin-top:4px;">Resubmitted · 3 hours ago</div>
+            </div>
+          </div>
+
+          <div class="review-panel">
+            <div class="review-panel-header">
+              <div style="display:flex;align-items:center;justify-content:space-between;">
+                <div>
+                  <div style="font-size:14px;font-weight:600;">Q2 2025 — All departments</div>
+                  <div style="font-size:11px;color:var(--text3);margin-top:2px;">137 records · submitted by Abena Boateng · 18 Jul 2025</div>
+                </div>
+                <span class="chip chip-amber"><span class="chip-dot"></span>Awaiting finance review</span>
+              </div>
+            </div>
+            <div class="review-panel-body">
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:18px;">
+                <div style="background:var(--surface2);border-radius:var(--radius-sm);padding:12px;text-align:center;">
+                  <div style="font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;">Total payout</div>
+                  <div style="font-size:18px;font-weight:600;color:var(--accent);">GHS 418k</div>
+                </div>
+                <div style="background:var(--surface2);border-radius:var(--radius-sm);padding:12px;text-align:center;">
+                  <div style="font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;">Budget</div>
+                  <div style="font-size:18px;font-weight:600;color:var(--blue);">GHS 450k</div>
+                </div>
+                <div style="background:var(--surface2);border-radius:var(--radius-sm);padding:12px;text-align:center;">
+                  <div style="font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;">Flagged</div>
+                  <div style="font-size:18px;font-weight:600;color:var(--amber);">2</div>
+                </div>
+              </div>
+
+              <div style="margin-bottom:14px;font-size:12px;font-weight:600;color:var(--text2);">Flagged records requiring review</div>
+              <div style="background:var(--amber-bg);border:1px solid #E8C88A;border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:10px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                  <div><div style="font-size:13px;font-weight:500;">Dani Kuma · EMP-0055</div><div style="font-size:11px;color:var(--amber);margin-top:2px;">Utilisation 104.5% — exceeds 100% threshold</div></div>
+                  <button class="btn btn-secondary btn-sm" onclick="navigate('empdetail')">View detail</button>
+                </div>
+              </div>
+              <div style="background:var(--amber-bg);border:1px solid #E8C88A;border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:18px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                  <div><div style="font-size:13px;font-weight:500;">Yaw Frimpong · EMP-0076</div><div style="font-size:11px;color:var(--amber);margin-top:2px;">Utilisation 101.2% — exceeds 100% threshold</div></div>
+                  <button class="btn btn-secondary btn-sm" onclick="navigate('empdetail')">View detail</button>
+                </div>
+              </div>
+
+              <div style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:10px;">All records summary</div>
+              <table style="width:100%;font-size:12px;">
+                <thead><tr><th style="background:var(--surface2);font-size:10px;">Employee</th><th style="background:var(--surface2);font-size:10px;">Util%</th><th style="background:var(--surface2);font-size:10px;">Tier</th><th style="background:var(--surface2);font-size:10px;">Bonus</th></tr></thead>
+                <tbody>
+                  <tr><td>Ama Owusu</td><td class="mono" style="color:var(--accent);">93.2%</td><td><span class="chip chip-green" style="font-size:10px;">T1</span></td><td class="mono" style="color:var(--accent);">1,680</td></tr>
+                  <tr><td>Kofi Mensah</td><td class="mono" style="color:var(--blue);">77.0%</td><td><span class="chip chip-blue" style="font-size:10px;">T2</span></td><td class="mono" style="color:var(--blue);">744</td></tr>
+                  <tr class="row-flagged"><td>Dani Kuma ⚠</td><td class="mono" style="color:var(--red);">104.5%</td><td><span class="chip chip-green" style="font-size:10px;">T1</span></td><td class="mono" style="color:var(--amber);">1,560</td></tr>
+                  <tr><td>Nana Bonsu</td><td class="mono" style="color:var(--blue);">84.0%</td><td><span class="chip chip-blue" style="font-size:10px;">T2</span></td><td class="mono" style="color:var(--blue);">672</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="review-panel-footer">
+              <input class="comment-input" placeholder="Add a comment (optional)…">
+              <button class="btn btn-secondary btn-sm">Return to HR</button>
+              <button class="btn btn-primary btn-sm">Approve →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ SETTINGS ══ -->
+      <div class="screen" id="screen-settings">
+        <div class="section-hd">
+          <div><h2>Settings</h2><div style="font-size:12px;color:var(--text3);margin-top:2px;">Bonus configuration · Periods · Access</div></div>
+        </div>
+        <div class="settings-layout">
+          <div class="settings-nav">
+            <div class="settings-nav-item active">Bonus tiers</div>
+            <div class="settings-nav-item">Periods</div>
+            <div class="settings-nav-item">Departments</div>
+            <div class="settings-nav-item">Users &amp; roles</div>
+          </div>
+          <div>
+            <div class="card">
+              <div class="card-header">
+                <span class="card-title">Bonus tier configuration</span>
+                <div style="display:flex;gap:8px;align-items:center;">
+                  <span style="font-size:11px;color:var(--text3);">Last saved: 4 days ago</span>
+                  <button class="btn btn-primary btn-sm">Save changes</button>
+                </div>
+              </div>
+              <div style="padding:0;">
+                <table style="width:100%">
+                  <thead><tr><th>Tier name</th><th>Min utilisation</th><th>Max utilisation</th><th>Bonus rate</th><th></th></tr></thead>
+                  <tbody>
+                    <tr>
+                      <td><div style="display:flex;align-items:center;gap:8px;"><span class="chip chip-green">Tier 1</span><input class="form-input" value="Tier 1 — High performer" style="height:28px;font-size:12px;flex:1;"></div></td>
+                      <td><div style="display:flex;align-items:center;gap:4px;"><input class="util-input" value="90" style="width:60px;"><span style="font-size:12px;color:var(--text3);">%</span></div></td>
+                      <td><span style="font-size:12px;color:var(--text3);">—</span></td>
+                      <td><div style="display:flex;align-items:center;gap:4px;"><input class="util-input" value="20" style="width:60px;"><span style="font-size:12px;color:var(--text3);">%</span></div></td>
+                      <td><button class="btn btn-ghost btn-sm" style="color:var(--red);">Remove</button></td>
+                    </tr>
+                    <tr>
+                      <td><div style="display:flex;align-items:center;gap:8px;"><span class="chip chip-blue">Tier 2</span><input class="form-input" value="Tier 2 — Solid performer" style="height:28px;font-size:12px;flex:1;"></div></td>
+                      <td><div style="display:flex;align-items:center;gap:4px;"><input class="util-input" value="75"><span style="font-size:12px;color:var(--text3);">%</span></div></td>
+                      <td><div style="display:flex;align-items:center;gap:4px;"><input class="util-input" value="89"><span style="font-size:12px;color:var(--text3);">%</span></div></td>
+                      <td><div style="display:flex;align-items:center;gap:4px;"><input class="util-input" value="12"><span style="font-size:12px;color:var(--text3);">%</span></div></td>
+                      <td><button class="btn btn-ghost btn-sm" style="color:var(--red);">Remove</button></td>
+                    </tr>
+                    <tr>
+                      <td><div style="display:flex;align-items:center;gap:8px;"><span class="chip chip-amber">Tier 3</span><input class="form-input" value="Tier 3 — Developing" style="height:28px;font-size:12px;flex:1;"></div></td>
+                      <td><div style="display:flex;align-items:center;gap:4px;"><input class="util-input" value="60"><span style="font-size:12px;color:var(--text3);">%</span></div></td>
+                      <td><div style="display:flex;align-items:center;gap:4px;"><input class="util-input" value="74"><span style="font-size:12px;color:var(--text3);">%</span></div></td>
+                      <td><div style="display:flex;align-items:center;gap:4px;"><input class="util-input" value="6"><span style="font-size:12px;color:var(--text3);">%</span></div></td>
+                      <td><button class="btn btn-ghost btn-sm" style="color:var(--red);">Remove</button></td>
+                    </tr>
+                    <tr style="background:var(--surface2);">
+                      <td colspan="5" style="text-align:center;padding:10px;"><button class="btn btn-ghost btn-sm" style="color:var(--accent);">+ Add tier</button></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div style="padding:12px 16px;border-top:1px solid var(--border);background:var(--blue-bg);border-radius:0 0 var(--radius) var(--radius);">
+                <div style="font-size:12px;color:var(--blue-text);">ℹ Tier changes apply to future calculation runs only. Historical records are immutable.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+const screens = {
+  dashboard: { title: 'Dashboard', crumb: 'Overview' },
+  employees: { title: 'Employees', crumb: 'Records' },
+  empdetail: { title: 'Ama Owusu', crumb: 'Employees › Ama Owusu' },
+  utilisation: { title: 'Utilisation Data', crumb: 'Data entry · Q2 2025' },
+  import: { title: 'Import Data', crumb: 'Employees › Import' },
+  calculations: { title: 'Run Calculation', crumb: 'Calculations' },
+  results: { title: 'Results — Q2 2025', crumb: 'Calculations › Q2 2025 Run' },
+  approvals: { title: 'Approval Queue', crumb: 'Approvals' },
+  settings: { title: 'Settings', crumb: 'Configuration' },
+};
+
+const roles = [
+  { initials: 'AB', name: 'Abena Boateng', role: 'HR Officer', color: '#1A472A' },
+  { initials: 'KA', name: 'Kwame Asante', role: 'Finance Analyst', color: '#1B3F6E' },
+  { initials: 'EO', name: 'Esi Owusu', role: 'Manager — Engineering', color: '#3D2B6E' },
+];
+let roleIdx = 0;
+
+function navigate(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const s = document.getElementById('screen-' + id);
+  if (s) s.classList.add('active');
+
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const navMap = { dashboard:'dashboard', employees:'employees', empdetail:'employees', utilisation:'utilisation', import:'employees', calculations:'calculations', results:'results', approvals:'approvals', settings:'settings' };
+  const navTarget = navMap[id];
+  document.querySelectorAll('.nav-item').forEach(n => {
+    if (n.getAttribute('onclick') && n.getAttribute('onclick').includes("'" + navTarget + "'")) n.classList.add('active');
+  });
+
+  const info = screens[id] || { title: id, crumb: '' };
+  document.getElementById('pageTitle').textContent = info.title;
+  document.getElementById('breadcrumb').textContent = info.crumb;
+}
+
+function cycleRole() {
+  roleIdx = (roleIdx + 1) % roles.length;
+  const r = roles[roleIdx];
+  document.getElementById('userAvatar').textContent = r.initials;
+  document.getElementById('userAvatar').style.background = r.color;
+  document.getElementById('userName').textContent = r.name;
+  document.getElementById('userRole').textContent = r.role;
+}
+</script>
+</body>
+</html>
